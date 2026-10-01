@@ -52,9 +52,6 @@ body {
 .thales-title {
   color: #1d4ed8;
 }
-.non-title {
-  color: #be123c;
-}
 .badge {
   font-size: 12px;
   font-weight: 700;
@@ -65,10 +62,6 @@ body {
 .thales-badge {
   background: #dbeafe;
   color: #1e40af;
-}
-.non-badge {
-  background: #ffe4e6;
-  color: #9f1239;
 }
 
 .btn-rotate {
@@ -123,13 +116,14 @@ svg {
   rx: 5;
 }
 .dim-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: inherit;
+  font-size: 12px;
   font-weight: 700;
   text-anchor: middle;
   dominant-baseline: central;
 }
 .v-label {
+  font-family: inherit;
   font-size: 15px;
   font-weight: 800;
   text-anchor: middle;
@@ -143,9 +137,6 @@ svg {
 }
 .pulse-thales {
   stroke: #60a5fa;
-}
-.pulse-non {
-  stroke: #fb7185;
 }
 .pulse-active {
   animation: edgePulseAnim 0.5s ease-out forwards;
@@ -196,16 +187,7 @@ input[type=range] {
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.45);
   border: 3px solid #ffffff;
 }
-.non-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #e11d48;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.45);
-  border: 3px solid #ffffff;
-}
+
 .math-panel {
   background: #f8fafc;
   border-radius: 14px;
@@ -214,16 +196,6 @@ input[type=range] {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-.formula-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
 }
 .frac-block {
   display: inline-flex;
@@ -242,29 +214,14 @@ input[type=range] {
   text-align: center;
   width: 100%;
 }
-.math-eq {
-  font-size: 20px;
-  font-weight: 800;
-  color: #2563eb;
-}
-.math-neq {
-  font-size: 22px;
-  font-weight: 800;
-  color: #e11d48;
-}
 .side-tag {
-  font-size: 12px;
-  font-weight: 800;
-  padding: 3px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 8px;
   border-radius: 6px;
 }
 .side-thales {
   background: #eff6ff;
   color: #1d4ed8;
   border: 1px solid #bfdbfe;
-}
-.side-non {
-  background: #fff1f2;
-  color: #be123c;
-  border: 1px solid #fecdd3;
 }

@@ -6,19 +6,13 @@
   <title>Mô Phỏng Định Lý Thales Mở Rộng</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     .canvas-wrap {
       touch-action: none;
       user-select: none;
       cursor: ns-resize;
-    }
-    .formula-col {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
     }
     .ext-line {
       stroke: rgba(148, 163, 184, 0.45);
@@ -32,16 +26,121 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 16px;
-      padding: 20px;
+      justify-content: flex-start;
+      gap: 14px;
+      padding: 16px;
     }
-    .formula-desc {
-      font-size: 13px;
-      font-weight: 600;
+    .sign-bank {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .sign-tile {
+      width: 34px;
+      height: 34px;
+      background: #eff6ff;
+      border: 2px solid #93c5fd;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #1d4ed8;
+      cursor: grab;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .sign-tile:hover {
+      background: #dbeafe;
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+    }
+    .sign-tile:active {
+      cursor: grabbing;
+      transform: scale(0.95);
+    }
+    .sign-tile.selected {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    }
+    .formula-unit {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+    .calc-row-cards {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .drop-question-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding-top: 4px;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .ratio-pure {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 800;
+      color: #334155;
+      font-size: 14px;
+    }
+    .drop-zone {
+      width: 36px;
+      height: 36px;
+      border: 2px dashed #94a3b8;
+      background: #f8fafc;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
       color: #64748b;
-      margin-bottom: 4px;
-      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .drop-zone.dragover {
+      border-color: #2563eb;
+      background: #eff6ff;
+      transform: scale(1.08);
+    }
+    .drop-zone.filled {
+      border-style: solid;
+      border-color: #cbd5e1;
+      background: #ffffff;
+      color: #1e40af;
+    }
+    .drop-zone.correct {
+      border-color: #16a34a;
+      background: #f0fdf4;
+      color: #15803d;
+    }
+    .drop-zone.wrong {
+      border-color: #dc2626;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+    .quiz-tip {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+      margin-left: auto;
     }
   </style>
 </head>
@@ -49,7 +148,6 @@
 
   <div class="container">
 
-    <!-- Card 1: Khung vẽ mô phỏng hình học & Thanh trượt điều khiển -->
     <div class="card">
       <div class="header-box">
         <h2 class="title thales-title">Định Lý Thales Mở Rộng</h2>
@@ -115,117 +213,169 @@
       </div>
     </div>
 
-    <!-- Card 2: Bảng tỉ số và hệ thức Thales mở rộng -->
     <div class="card card-formula">
       <div class="header-box">
-        <h2 class="title thales-title">Tỉ Lệ Đoạn Thẳng Tương Ứng</h2>
-        <span class="badge thales-badge">Hệ thức Thales</span>
+        <h2 class="title thales-title">Hệ Thức Tỉ Lệ</h2>
+        <div class="sign-bank" title="Kéo hoặc chọn dấu để đưa vào ô ?">
+          <div class="sign-tile" draggable="true" data-sign="=">=</div>
+          <div class="sign-tile" draggable="true" data-sign="≠">≠</div>
+          <div class="sign-tile" draggable="true" data-sign="<">&lt;</div>
+          <div class="sign-tile" draggable="true" data-sign=">">&gt;</div>
+        </div>
       </div>
 
       <div class="math-panel math-panel-full">
-        <div class="formula-col">
-          <div>
-            <div class="formula-desc">Đoạn trên / Toàn phần</div>
-            <div class="formula-row">
-              <div class="side-tag side-thales">
-                <span class="frac-block">
-                  <span id="nameAM" class="num">AM</span>
-                  <span id="nameAB" class="den">AB</span>
-                </span>
-                &nbsp;=&nbsp;
-                <span class="frac-block">
-                  <span id="numAM" class="num">0.0</span>
-                  <span id="denAB" class="den">0.0</span>
-                </span>
-                <span id="eqRatio1L">&nbsp;=&nbsp;</span>
-                <span id="valRatioL" class="math-font">0.00</span>
-              </div>
+        <!-- Bộ tỉ số 1 -->
+        <div class="formula-unit">
+          <div class="calc-row-cards">
+            <div class="side-tag side-thales">
+              <span class="frac-block">
+                <span id="nameAM" class="num">AM</span>
+                <span id="nameAB" class="den">AB</span>
+              </span>
+              &nbsp;=&nbsp;
+              <span class="frac-block">
+                <span id="numAM" class="num">0.0</span>
+                <span id="denAB" class="den">0.0</span>
+              </span>
+              <span id="eqRatio1L">&nbsp;=&nbsp;</span>
+              <span id="valRatioL">0.00</span>
+            </div>
 
-              <span id="eqMid1" class="math-eq">=</span>
-
-              <div class="side-tag side-thales">
-                <span class="frac-block">
-                  <span id="nameAN" class="num">AN</span>
-                  <span id="nameAC" class="den">AC</span>
-                </span>
-                &nbsp;=&nbsp;
-                <span class="frac-block">
-                  <span id="numAN" class="num">0.0</span>
-                  <span id="denAC" class="den">0.0</span>
-                </span>
-                <span id="eqRatio1R">&nbsp;=&nbsp;</span>
-                <span id="valRatioR" class="math-font">0.00</span>
-              </div>
+            <div class="side-tag side-thales">
+              <span class="frac-block">
+                <span id="nameAN" class="num">AN</span>
+                <span id="nameAC" class="den">AC</span>
+              </span>
+              &nbsp;=&nbsp;
+              <span class="frac-block">
+                <span id="numAN" class="num">0.0</span>
+                <span id="denAC" class="den">0.0</span>
+              </span>
+              <span id="eqRatio1R">&nbsp;=&nbsp;</span>
+              <span id="valRatioR">0.00</span>
             </div>
           </div>
 
-          <div>
-            <div class="formula-desc">Đoạn trên / Đoạn dưới</div>
-            <div class="formula-row">
-              <div class="side-tag side-thales">
-                <span class="frac-block">
-                  <span id="nameAM2" class="num">AM</span>
-                  <span id="nameBM2" class="den">BM</span>
-                </span>
-                &nbsp;=&nbsp;
-                <span class="frac-block">
-                  <span id="numAM2" class="num">0.0</span>
-                  <span id="denBM2" class="den">0.0</span>
-                </span>
-                <span id="eqRatio2L">&nbsp;=&nbsp;</span>
-                <span id="valRatio2L" class="math-font">0.00</span>
-              </div>
+          <div class="drop-question-row">
+            <div class="ratio-pure">
+              <span class="frac-block">
+                <span id="qNameAM1" class="num">AM</span>
+                <span id="qNameAB1" class="den">AB</span>
+              </span>
+            </div>
 
-              <span id="eqMid2" class="math-eq">=</span>
+            <div class="drop-zone" data-index="1" title="Kéo thả dấu hoặc nhấp vào đây để chọn">?</div>
 
-              <div class="side-tag side-thales">
-                <span class="frac-block">
-                  <span id="nameAN2" class="num">AN</span>
-                  <span id="nameCN2" class="den">CN</span>
-                </span>
-                &nbsp;=&nbsp;
-                <span class="frac-block">
-                  <span id="numAN2" class="num">0.0</span>
-                  <span id="denCN2" class="den">0.0</span>
-                </span>
-                <span id="eqRatio2R">&nbsp;=&nbsp;</span>
-                <span id="valRatio2R" class="math-font">0.00</span>
-              </div>
+            <div class="ratio-pure">
+              <span class="frac-block">
+                <span id="qNameAN1" class="num">AN</span>
+                <span id="qNameAC1" class="den">AC</span>
+              </span>
+            </div>
+
+            <span class="quiz-tip">Kéo dấu thả vào ô</span>
+          </div>
+        </div>
+
+        <!-- Bộ tỉ số 2 -->
+        <div class="formula-unit">
+          <div class="calc-row-cards">
+            <div class="side-tag side-thales">
+              <span class="frac-block">
+                <span id="nameAM2" class="num">AM</span>
+                <span id="nameBM2" class="den">BM</span>
+              </span>
+              &nbsp;=&nbsp;
+              <span class="frac-block">
+                <span id="numAM2" class="num">0.0</span>
+                <span id="denBM2" class="den">0.0</span>
+              </span>
+              <span id="eqRatio2L">&nbsp;=&nbsp;</span>
+              <span id="valRatio2L">0.00</span>
+            </div>
+
+            <div class="side-tag side-thales">
+              <span class="frac-block">
+                <span id="nameAN2" class="num">AN</span>
+                <span id="nameCN2" class="den">CN</span>
+              </span>
+              &nbsp;=&nbsp;
+              <span class="frac-block">
+                <span id="numAN2" class="num">0.0</span>
+                <span id="denCN2" class="den">0.0</span>
+              </span>
+              <span id="eqRatio2R">&nbsp;=&nbsp;</span>
+              <span id="valRatio2R">0.00</span>
             </div>
           </div>
 
-          <div>
-            <div class="formula-desc">Đoạn dưới / Toàn phần</div>
-            <div class="formula-row">
-              <div class="side-tag side-thales">
-                <span class="frac-block">
-                  <span id="nameBM3" class="num">BM</span>
-                  <span id="nameAB3" class="den">AB</span>
-                </span>
-                &nbsp;=&nbsp;
-                <span class="frac-block">
-                  <span id="numBM3" class="num">0.0</span>
-                  <span id="denAB3" class="den">0.0</span>
-                </span>
-                <span id="eqRatio3L">&nbsp;=&nbsp;</span>
-                <span id="valRatio3L" class="math-font">0.00</span>
-              </div>
+          <div class="drop-question-row">
+            <div class="ratio-pure">
+              <span class="frac-block">
+                <span id="qNameAM2" class="num">AM</span>
+                <span id="qNameBM2" class="den">BM</span>
+              </span>
+            </div>
 
-              <span id="eqMid3" class="math-eq">=</span>
+            <div class="drop-zone" data-index="2" title="Kéo thả dấu hoặc nhấp vào đây để chọn">?</div>
 
-              <div class="side-tag side-thales">
-                <span class="frac-block">
-                  <span id="nameCN3" class="num">CN</span>
-                  <span id="nameAC3" class="den">AC</span>
-                </span>
-                &nbsp;=&nbsp;
-                <span class="frac-block">
-                  <span id="numCN3" class="num">0.0</span>
-                  <span id="denAC3" class="den">0.0</span>
-                </span>
-                <span id="eqRatio3R">&nbsp;=&nbsp;</span>
-                <span id="valRatio3R" class="math-font">0.00</span>
-              </div>
+            <div class="ratio-pure">
+              <span class="frac-block">
+                <span id="qNameAN2" class="num">AN</span>
+                <span id="qNameCN2" class="den">CN</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bộ tỉ số 3 -->
+        <div class="formula-unit">
+          <div class="calc-row-cards">
+            <div class="side-tag side-thales">
+              <span class="frac-block">
+                <span id="nameBM3" class="num">BM</span>
+                <span id="nameAB3" class="den">AB</span>
+              </span>
+              &nbsp;=&nbsp;
+              <span class="frac-block">
+                <span id="numBM3" class="num">0.0</span>
+                <span id="denAB3" class="den">0.0</span>
+              </span>
+              <span id="eqRatio3L">&nbsp;=&nbsp;</span>
+              <span id="valRatio3L">0.00</span>
+            </div>
+
+            <div class="side-tag side-thales">
+              <span class="frac-block">
+                <span id="nameCN3" class="num">CN</span>
+                <span id="nameAC3" class="den">AC</span>
+              </span>
+              &nbsp;=&nbsp;
+              <span class="frac-block">
+                <span id="numCN3" class="num">0.0</span>
+                <span id="denAC3" class="den">0.0</span>
+              </span>
+              <span id="eqRatio3R">&nbsp;=&nbsp;</span>
+              <span id="valRatio3R">0.00</span>
+            </div>
+          </div>
+
+          <div class="drop-question-row">
+            <div class="ratio-pure">
+              <span class="frac-block">
+                <span id="qNameBM3" class="num">BM</span>
+                <span id="qNameAB3" class="den">AB</span>
+              </span>
+            </div>
+
+            <div class="drop-zone" data-index="3" title="Kéo thả dấu hoặc nhấp vào đây để chọn">?</div>
+
+            <div class="ratio-pure">
+              <span class="frac-block">
+                <span id="qNameCN3" class="num">CN</span>
+                <span id="qNameAC3" class="den">AC</span>
+              </span>
             </div>
           </div>
         </div>
@@ -298,20 +448,38 @@
 
       document.getElementById('badgeThales').textContent = `MN // ${vL}${vR}`;
 
-      document.getElementById('nameAM').textContent = `${vTop}M`;
-      document.getElementById('nameAB').textContent = `${vTop}${vL}`;
-      document.getElementById('nameAN').textContent = `${vTop}N`;
-      document.getElementById('nameAC').textContent = `${vTop}${vR}`;
+      const tAM = `${vTop}M`, tAB = `${vTop}${vL}`, tAN = `${vTop}N`, tAC = `${vTop}${vR}`;
+      const tBM = `M${vL}`, tCN = `N${vR}`;
 
-      document.getElementById('nameAM2').textContent = `${vTop}M`;
-      document.getElementById('nameBM2').textContent = `M${vL}`;
-      document.getElementById('nameAN2').textContent = `${vTop}N`;
-      document.getElementById('nameCN2').textContent = `N${vR}`;
+      document.getElementById('nameAM').textContent = tAM;
+      document.getElementById('nameAB').textContent = tAB;
+      document.getElementById('nameAN').textContent = tAN;
+      document.getElementById('nameAC').textContent = tAC;
 
-      document.getElementById('nameBM3').textContent = `M${vL}`;
-      document.getElementById('nameAB3').textContent = `${vTop}${vL}`;
-      document.getElementById('nameCN3').textContent = `N${vR}`;
-      document.getElementById('nameAC3').textContent = `${vTop}${vR}`;
+      document.getElementById('nameAM2').textContent = tAM;
+      document.getElementById('nameBM2').textContent = tBM;
+      document.getElementById('nameAN2').textContent = tAN;
+      document.getElementById('nameCN2').textContent = tCN;
+
+      document.getElementById('nameBM3').textContent = tBM;
+      document.getElementById('nameAB3').textContent = tAB;
+      document.getElementById('nameCN3').textContent = tCN;
+      document.getElementById('nameAC3').textContent = tAC;
+
+      document.getElementById('qNameAM1').textContent = tAM;
+      document.getElementById('qNameAB1').textContent = tAB;
+      document.getElementById('qNameAN1').textContent = tAN;
+      document.getElementById('qNameAC1').textContent = tAC;
+
+      document.getElementById('qNameAM2').textContent = tAM;
+      document.getElementById('qNameBM2').textContent = tBM;
+      document.getElementById('qNameAN2').textContent = tAN;
+      document.getElementById('qNameCN2').textContent = tCN;
+
+      document.getElementById('qNameBM3').textContent = tBM;
+      document.getElementById('qNameAB3').textContent = tAB;
+      document.getElementById('qNameCN3').textContent = tCN;
+      document.getElementById('qNameAC3').textContent = tAC;
     }
 
     function computeThalesTargets() {
@@ -407,16 +575,14 @@
       document.getElementById('denAC').textContent = dAC;
 
       if (parseFloat(dAB) === 0 || parseFloat(dAC) === 0) {
-        document.getElementById('valRatioL').textContent = "không xác định";
-        document.getElementById('valRatioR').textContent = "không xác định";
-        document.getElementById('eqMid1').style.display = 'none';
+        document.getElementById('valRatioL').textContent = "---";
+        document.getElementById('valRatioR').textContent = "---";
         document.getElementById('eqRatio1L').style.display = 'none';
         document.getElementById('eqRatio1R').style.display = 'none';
       } else {
         const ratioStr = Math.abs(k).toFixed(2);
         document.getElementById('valRatioL').textContent = ratioStr;
         document.getElementById('valRatioR').textContent = ratioStr;
-        document.getElementById('eqMid1').style.display = '';
         document.getElementById('eqRatio1L').style.display = '';
         document.getElementById('eqRatio1R').style.display = '';
       }
@@ -427,16 +593,14 @@
       document.getElementById('denCN2').textContent = dNC;
 
       if (parseFloat(dMB) === 0 || parseFloat(dNC) === 0) {
-        document.getElementById('valRatio2L').textContent = "không xác định";
-        document.getElementById('valRatio2R').textContent = "không xác định";
-        document.getElementById('eqMid2').style.display = 'none';
+        document.getElementById('valRatio2L').textContent = "---";
+        document.getElementById('valRatio2R').textContent = "---";
         document.getElementById('eqRatio2L').style.display = 'none';
         document.getElementById('eqRatio2R').style.display = 'none';
       } else {
         const ratio2Str = (Math.abs(k) / Math.abs(1 - k)).toFixed(2);
         document.getElementById('valRatio2L').textContent = ratio2Str;
         document.getElementById('valRatio2R').textContent = ratio2Str;
-        document.getElementById('eqMid2').style.display = '';
         document.getElementById('eqRatio2L').style.display = '';
         document.getElementById('eqRatio2R').style.display = '';
       }
@@ -447,16 +611,14 @@
       document.getElementById('denAC3').textContent = dAC;
 
       if (parseFloat(dAB) === 0 || parseFloat(dAC) === 0) {
-        document.getElementById('valRatio3L').textContent = "không xác định";
-        document.getElementById('valRatio3R').textContent = "không xác định";
-        document.getElementById('eqMid3').style.display = 'none';
+        document.getElementById('valRatio3L').textContent = "---";
+        document.getElementById('valRatio3R').textContent = "---";
         document.getElementById('eqRatio3L').style.display = 'none';
         document.getElementById('eqRatio3R').style.display = 'none';
       } else {
         const ratio3Str = Math.abs(1 - k).toFixed(2);
         document.getElementById('valRatio3L').textContent = ratio3Str;
         document.getElementById('valRatio3R').textContent = ratio3Str;
-        document.getElementById('eqMid3').style.display = '';
         document.getElementById('eqRatio3L').style.display = '';
         document.getElementById('eqRatio3R').style.display = '';
       }
@@ -572,6 +734,67 @@
       () => (fixedPtsThales[(rotThales + 1) % 3].y + fixedPtsThales[(rotThales + 2) % 3].y) / 2, 
       updateThales
     );
+
+    let activeSelectedSign = null;
+    const signTiles = document.querySelectorAll('.sign-tile');
+    const dropZones = document.querySelectorAll('.drop-zone');
+
+    signTiles.forEach(tile => {
+      tile.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', tile.getAttribute('data-sign'));
+      });
+
+      tile.addEventListener('click', () => {
+        if (activeSelectedSign === tile.getAttribute('data-sign')) {
+          tile.classList.remove('selected');
+          activeSelectedSign = null;
+        } else {
+          signTiles.forEach(t => t.classList.remove('selected'));
+          tile.classList.add('selected');
+          activeSelectedSign = tile.getAttribute('data-sign');
+        }
+      });
+    });
+
+    function applySignToZone(zone, sign) {
+      zone.textContent = sign;
+      zone.classList.remove('correct', 'wrong');
+      zone.classList.add('filled');
+      if (sign === '=') {
+        zone.classList.add('correct');
+      } else {
+        zone.classList.add('wrong');
+      }
+    }
+
+    dropZones.forEach(zone => {
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('dragover');
+      });
+
+      zone.addEventListener('dragleave', () => {
+        zone.classList.remove('dragover');
+      });
+
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        const sign = e.dataTransfer.getData('text/plain');
+        if (sign) {
+          applySignToZone(zone, sign);
+        }
+      });
+
+      zone.addEventListener('click', () => {
+        if (activeSelectedSign) {
+          applySignToZone(zone, activeSelectedSign);
+        } else if (zone.textContent !== '?') {
+          zone.textContent = '?';
+          zone.classList.remove('filled', 'correct', 'wrong');
+        }
+      });
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
       updateThales();
